@@ -1,0 +1,23 @@
+package homeAway;
+
+import dataStructures.*;
+
+public class TravelsClass implements Travels{
+
+	private int points;
+	private Home home;
+	
+	public TravelsClass(Home home, int points) {
+		this.home = home;
+		this.points = points;
+	}
+	
+	public Home getHome() {
+		return home;
+	}
+
+	public int getPoints() {
+		return points;
+	}
+
+}
