@@ -1,0 +1,144 @@
+package homeAway;
+
+import dataStructures.*;
+
+
+public class HomeAwayClass implements HomeAway {
+	
+	private List<User> usersL;
+	Home h = null;
+	
+	public HomeAwayClass() {		
+		usersL = new DoublyLinkedList<User>();
+	}
+
+//--------User--------//
+	
+	public void addUser(String idUser, String email, String phone, String name, String nacionalidade, String morada) {
+		User user = new UserClass(idUser, email, phone, name, nacionalidade, morada);
+		if(usersL.isEmpty()) {
+			usersL.addFirst(user);
+		} 
+		else usersL.addLast(user);
+	}
+
+	
+	public void changeInfoUser(String idUser, String email, String phone, String morada) {
+		getUser(idUser).changeInfo(email, phone, morada);		
+	}
+
+	public void removeUser(String idUser) {
+		usersL.remove(getUser(idUser));
+	}
+
+	public User getUser(String idUser) {
+		
+		User user = null;
+		
+		for(int i= 0 ; i<usersL.size(); i++) {
+			if(usersL.get(i).getIdUser().equals(idUser)) {
+				user = usersL.get(i);
+			}
+		}
+		return user;
+	}
+
+	
+//----------Home----------//	
+	
+	
+	public void addHome(String idHome, String idUser, int preco, int pessoas, String local, String descricao,
+			String morada) {
+		Home home = new HomeClass(idHome, idUser, preco, pessoas, local, descricao, morada);
+		this.h = home;
+		getUser(idUser).addHome(home);
+	}
+
+	public void removeHome(String idHome) {
+		if(h.getIdHome().equals(idHome)) {
+			getUser(h.getIdUser()).removeHome(idHome);
+		}
+		
+	}
+
+	public Home getHome(String idHome) {
+		Home home = null;
+		if(h.getIdHome().equals(idHome)) {
+			home = getUser(h.getIdUser()).getHome(idHome);
+		}
+		return home;
+	}
+	
+//	public Home getOwnerHome(String idUser) {
+//		Home home = null;
+//		
+//		for(int i= 0 ; i<homesL.size(); i++) {
+//			if(homesL.get(i).getIdUser().equals(idUser)) {
+//				home = homesL.get(i);
+//			}
+//		}
+//		return home;
+//	}
+
+	
+//-------Estadias--------//	
+	
+	public void addStay(String idUser, String idHome, int points) {
+		getUser(idUser).addTravel(getHome(idHome), points);
+		
+	}
+	
+	public void addStayOwner(String idUser, String idHome) {
+		int points = 0;
+		getUser(idUser).addTravel(getHome(idHome), points);
+	}
+
+	
+//----------EXTRAS-----------//	
+	
+	
+	public boolean hasidUser(String idUser) {
+		if(getUser(idUser) != null) {
+			return true;
+		}
+		return false;
+	}
+
+	public boolean hasIdHome(String idHome) {
+		if(getHome(idHome) != null) {
+			return true;
+		}
+		return false;
+	}
+
+	public boolean hasHome(String idUser) {
+		boolean found = false;
+		
+		found = getUser(idUser).hasHome();
+		
+		
+//		for(int i = 0 ; i<h.size(); i++) {
+//			if(homesL.get(i).getIdUser().equals(idUser)){
+//				found = true;
+//			}
+//		}
+		
+		return found;
+	}
+
+	public boolean hasBeenVisited(String idHome) {
+		if(getHome(idHome).getVisits() > 0) {
+			return true;
+		}
+		return false;
+	}
+
+	public boolean isHomeThisUser(String idUser, String idHome) {
+		if(getHome(idHome).getIdUser().equals(idUser)) {
+			return true;
+		}
+		
+		return false;
+	}
+	
+}
