@@ -1,6 +1,5 @@
 package homeAway;
 
-import dataStructures.*;
 
 public class TravelsClass implements Travels{
 
