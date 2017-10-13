@@ -57,10 +57,15 @@ public class HomeAwayClass implements HomeAway {
 	public void removeHome(String idHome) {
 		if(h.getIdHome().equals(idHome)) {
 			getUser(h.getIdUser()).removeHome(idHome);
+			h = null;
 		}
 		
 	}
 
+	public Home getHomeN() {
+		return h;
+	}
+	
 	public Home getHome(String idHome) {
 		Home home = null;
 		if(h.getIdHome().equals(idHome)) {
@@ -105,7 +110,7 @@ public class HomeAwayClass implements HomeAway {
 	}
 
 	public boolean hasIdHome(String idHome) {
-		if(getHome(idHome) != null) {
+		if(getHomeN() != null) {
 			return true;
 		}
 		return false;
