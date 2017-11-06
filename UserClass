@@ -4,8 +4,8 @@ import dataStructures.*;
 
 public class UserClass implements User{
 	
-	private List<Home> homesUser;
 	private List<Travels> travels;
+	private Dictionary<String, Home> homes;
 	
 		
 	private String idUser;
@@ -23,8 +23,10 @@ public class UserClass implements User{
 		this.nacionalidade = nacionalidade;
 		this.morada = morada;
 		
-		homesUser = new DoublyLinkedList<Home>();
+		new DoublyLinkedList<Home>();
 		travels = new DoublyLinkedList<Travels>();
+		homes = new ChainedHashTable<String, Home>();
+		
 	}
 	
 	public String getIdUser() {
@@ -64,45 +66,68 @@ public class UserClass implements User{
 		
 	}
 	
+	public String getAllInfo() {
+		return name + ": " + morada + ", " + nacionalidade + ", " + email + ", " + phone;
+	}
+	
+	
+//-----------Home--------//	
+	
 	public void addHome(Home home) {
-		if(homesUser.isEmpty()) {
-			homesUser.addFirst(home);
-		}
-		else homesUser.addLast(home);
+		
+		homes.insert(home.getIdHome(), home);
+				
+//		if(homesUser.isEmpty()) {
+//			homesUser.addFirst(home);
+//		}
+//		else homesUser.addLast(home);
 	}
 	
 	public void removeHome(String idHome) {
-		homesUser.remove(getHome(idHome));
+
+		homes.remove(idHome);
+//		homesUser.remove(getHome(idHome));
 	}
 	
 	public Home getHome(String idHome) {
-		Home home = null;
 		
-		for(int i= 0 ; i<homesUser.size(); i++) {
-			if(homesUser.get(i).getIdHome().equals(idHome)) {
-				home = homesUser.get(i);
-			}
-		}
-		return home;
+		return homes.find(idHome);
+		
+//		Home home = null;
+//		
+//		for(int i= 0 ; i<homesUser.size(); i++) {
+//			if(homesUser.get(i).getIdHome().equals(idHome)) {
+//				home = homesUser.get(i);
+//			}
+//		}
+//		return home;
 	}
 	
 	public boolean hasHome() {
-		if(!homesUser.isEmpty()) {
+		if(!homes.isEmpty()) {
 			return true;
 		}
 		return false;
 	}
 	
-	public Iterator<Home> homeIterator(){
-		return homesUser.iterator();
+	public boolean isHomeEmpty() {
+		if(homes.isEmpty()) {
+			return true;
+		}
+		return false;
 	}
+	
+	public Iterator<Entry<String, Home>> homeIterator(){
+		return homes.iterator();
+		
+		
+		//return homesUser.iterator();
+	}
+	
+//----------Travels----------//	
 	
 	public Iterator<Travels> travelsIterator(){
 		return travels.iterator();
-	}
-	
-	public String getAllInfo() {
-		return name + ": " + morada + ", " + nacionalidade + ", " + email + ", " + phone;
 	}
 	
 	public void addTravel(Home home, int points) {
@@ -125,4 +150,5 @@ public class UserClass implements User{
 		}
 		return false;
 	}
+	
 }
