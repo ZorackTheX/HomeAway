@@ -7,9 +7,11 @@ public class HomeAwayClass implements HomeAway {
 	
 	private List<User> usersL;
 	Home h = null;
+	private Dictionary<String, Home> homes;
 	
 	public HomeAwayClass() {		
 		usersL = new DoublyLinkedList<User>();
+		homes = new ChainedHashTable<String, Home>();
 	}
 
 //--------User--------//
@@ -43,6 +45,18 @@ public class HomeAwayClass implements HomeAway {
 		return user;
 	}
 
+//	public User getUserFromLocal(String local) {
+//		
+//		User user = null;
+//		
+//		for(int i = 0; i<usersL.size(); i++) {
+//			if(usersL.get(i).getHome(h.getIdHome()).getLocal().equals(local)) {
+//				user = usersL.get(i);
+//			}
+//		}
+//		
+//		return user;
+//	}
 	
 //----------Home----------//	
 	
@@ -50,28 +64,23 @@ public class HomeAwayClass implements HomeAway {
 	public void addHome(String idHome, String idUser, int preco, int pessoas, String local, String descricao,
 			String morada) {
 		Home home = new HomeClass(idHome, idUser, preco, pessoas, local, descricao, morada);
-		this.h = home;
+		homes.insert(idHome, home);
 		getUser(idUser).addHome(home);
 	}
 
 	public void removeHome(String idHome) {
-		if(h.getIdHome().equals(idHome)) {
-			getUser(h.getIdUser()).removeHome(idHome);
-			h = null;
-		}
-		
+		getUser(homes.find(idHome).getIdUser()).removeHome(idHome);
+		homes.remove(idHome);
+	
 	}
 
+	//REVER!!!
 	public Home getHomeN() {
 		return h;
 	}
 	
 	public Home getHome(String idHome) {
-		Home home = null;
-		if(h.getIdHome().equals(idHome)) {
-			home = getUser(h.getIdUser()).getHome(idHome);
-		}
-		return home;
+		return homes.find(idHome);
 	}
 	
 //	public Home getOwnerHome(String idUser) {
@@ -110,7 +119,7 @@ public class HomeAwayClass implements HomeAway {
 	}
 
 	public boolean hasIdHome(String idHome) {
-		if(getHomeN() != null) {
+		if(getHome(idHome) != null) {
 			return true;
 		}
 		return false;
@@ -146,4 +155,10 @@ public class HomeAwayClass implements HomeAway {
 		return false;
 	}
 	
+	public boolean hasHomeEmpty() {
+		if(getHomeN() != null) {
+			return false;
+		}
+		return true;
+	}
 }
